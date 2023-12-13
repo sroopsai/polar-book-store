@@ -1,2 +1,43 @@
-package in.roopsai.polarbook.store.catalogservice.persistence;public class InMemoryBookRepository {
+package in.roopsai.polarbook.store.catalogservice.persistence;
+
+import in.roopsai.polarbook.store.catalogservice.domain.Book;
+import in.roopsai.polarbook.store.catalogservice.domain.BookRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Repository
+public class InMemoryBookRepository implements BookRepository {
+    private static final Map<String, Book> books = new ConcurrentHashMap<String, Book>();
+
+    @Override
+    public Iterable<Book> findAll() {
+        return books.values();
+    }
+
+    @Override
+    public Optional<Book> find(String isbn) {
+        return exists(isbn) ? Optional.of(books.get(isbn)) : Optional.empty();
+    }
+
+    @Override
+    public boolean exists(String isbn) {
+        return books.get(isbn) != null;
+    }
+
+    @Override
+    public Book save(Book book) {
+        books.put(book.isbn(), book);
+        return book;
+    }
+
+    @Override
+    public void delete(String isbn) {
+        books.remove(isbn);
+    }
+
+
+
 }
