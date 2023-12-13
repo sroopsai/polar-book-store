@@ -18,6 +18,15 @@ public class BookService {
         return bookRepository.find(isbn).orElseThrow(()->new BookNotFoundException(isbn));
     }
 
+    public Book updateBookDetails(String isbn, Book book) {
+        return bookRepository.find(isbn).map(existingBook -> {
+            var bookToUpdate = new Book(existingBook.isbn(),book.title(),
+            book.author(),
+            book.price());
+        return bookRepository.save(bookToUpdate);
+        }).orElseGet(() -> addBookToCatalog(book));
+    }
+
 
     public Book addBookToCatalog(Book book) {
         if (bookRepository.exists(book.isbn())) {
