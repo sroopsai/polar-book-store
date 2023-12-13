@@ -2,6 +2,7 @@ package in.roopsai.polarbook.store.catalogservice.web;
 
 import in.roopsai.polarbook.store.catalogservice.domain.Book;
 import in.roopsai.polarbook.store.catalogservice.domain.BookService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Book post(@RequestBody Book book) {
+    public Book post(@Valid @RequestBody Book book) {
         return bookService.addBookToCatalog(book);
     }
 
